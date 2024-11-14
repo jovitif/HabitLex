@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendário - Flask</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+</head>
+<body>
+    <div class="calendar-container">
+        <h1>Calendário: {{ month_name }} {{ year }}</h1>
+
+        <div class="calendar-navigation">
+            <!-- Navegação de mês -->
+            <a href="{{ url_for('index', year=year, month=month-1) }}"><< Mês Anterior</a>
+            <a href="{{ url_for('index', year=year, month=month+1) }}">Próximo Mês >></a>
+        </div>
+
+        <table class="calendar">
+            <thead>
+                <tr>
+                    <th>Segunda</th>
+                    <th>Terça</th>
+                    <th>Quarta</th>
+                    <th>Quinta</th>
+                    <th>Sexta</th>
+                    <th>Sábado</th>
+                    <th>Domingo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for week in weeks %}
+                    <tr>
+                    {% for day in week %}
+                        <td class="{% if day %}day{% else %}empty{% endif %}">
+                            {% if day %}
+                                <a href="{{ url_for('dia', year=year, month=month, day=day) }}">
+                                    {{ day }}
+                                </a>
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

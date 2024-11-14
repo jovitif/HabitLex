@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividades - {{ day }}/{{ month }}/{{ year }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+    <style>
+        .highlight {
+            background-color: #ffeb3b;
+            font-weight: bold;
+        }
+
+        /* Definindo o tamanho da tabela e ativando o scroll vertical */
+        .table-container {
+            max-height: 400px; /* Define a altura fixa para a tabela */
+            overflow-y: auto;  /* Ativa o scroll vertical */
+            border: 1px solid #ccc; /* Opcional: adiciona uma borda ao contêiner da tabela */
+        }
+
+        .activity-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .activity-table th, .activity-table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="activity-container">
+        <h1>Atividades para o dia {{ day }} de {{ month }}/{{ year }}</h1>
+
+        <form method="POST">
+            <div class="table-container">
+                <table class="activity-table">
+                    <thead>
+                        <tr>
+                            <th>Horário</th>
+                            <th>Atividade</th>
+                            <th>Frequência</th>
+                            <th>Realizado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for horario in horarios %}
+                            <tr id="row_{{ horario }}" class="activity-row">
+                                <td>{{ horario }}</td>
+                                <td>
+                                    <input type="text" name="atividade_{{ horario }}" value="{{ atividades.get(horario, {}).get('atividade', '') }}">
+                                </td>
+                                <td>
+                                    <!-- Seleciona a frequência para os dias da semana -->
+                                    <select name="frequencia_{{ horario }}">
+                                        <option value="somente">Somente este dia</option>
+                                        <option value="todos">Todos os dias</option>
+                                        <option value="semanal">Toda semana neste dia</option>
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <input type="checkbox" name="status_{{ horario }}" {% if atividades.get(horario, {}).get('status') %}checked{% endif %}>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+            <button type="submit">Salvar Atividades</button>
+        </form>
+
+        <a href="{{ url_for('index') }}">Voltar ao Calendário</a>
+    </div>
+
+    <script>
+        function formatCurrentTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = Math.floor(now.getMinutes() / 15) * 15;
+            const formattedMinutes = minutes.toString().padStart(2, '0');
+            return `${hours}:${formattedMinutes}`;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const currentTime = formatCurrentTime();
+            const currentRow = document.getElementById(`row_${currentTime}`);
+
+            if (currentRow) {
+                currentRow.classList.add("highlight");
+                currentRow.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+        });
+    </script>
+</body>
+</html>

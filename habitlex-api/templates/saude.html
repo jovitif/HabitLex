@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saúde Personalizada</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+
+</head>
+<body>
+    <h1>Informações de Saúde</h1>
+
+    <form method="POST">
+        <label for="data_nascimento">Data de Nascimento:</label>
+        <input type="date" id="data_nascimento" name="data_nascimento" required><br><br>
+
+        <label for="peso">Peso (kg):</label>
+        <input type="number" id="peso" name="peso" step="0.1" required><br><br>
+
+        <label for="altura">Altura (cm):</label>
+        <input type="number" id="altura" name="altura" step="0.1" required><br><br>
+
+        <label for="sexo">Sexo:</label>
+        <select id="sexo" name="sexo">
+            <option value="M">Masculino</option>
+            <option value="F">Feminino</option>
+        </select><br><br>
+
+        <label for="nivel_atividade">Nível de Atividade:</label>
+        <select id="nivel_atividade" name="nivel_atividade">
+            <option value="sedentario">Sedentário</option>
+            <option value="moderado">Moderado</option>
+            <option value="ativo">Ativo</option>
+        </select><br><br>
+
+        <button type="submit">Obter Recomendações</button>
+    </form>
+
+    {% if agua %}
+    <h2>Suas Recomendações de Saúde</h2>
+    <ul>
+        <li><strong>Quantidade ideal de água:</strong> {{ agua }} litros por dia</li>
+        <li><strong>Horas ideais de sono:</strong> {{ sono }} por noite</li>
+        <li><strong>Calorias diárias recomendadas:</strong> {{ calorias }} kcal</li>
+        <li><strong>Consumo diário de fibras:</strong> {{ fibras }} g</li>
+        <li><strong>Macronutrientes diários:</strong> Proteínas {{ proteinas }} g, Carboidratos {{ carboidratos }} g, Gorduras {{ gorduras }} g</li>
+    </ul>
+    {% endif %}
+</body>
+</html>
